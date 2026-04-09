@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+########################################################################################
+# Copyright (C) 2024 MAE Robotics Inc. - All Rights Reserved
+#
+# This source code is protected under international copyright laws. All rights
+# reserved by the copyright holders. This file is proprietary and may only be
+# accessed, used, or distributed by authorized individuals with explicit permission
+# from the copyright holders. Unauthorized access, use, or distribution is strictly
+# prohibited. If you have received this file in error, please notify the copyright
+# holders immediately and delete all copies of this file.
+#
+# Visit: www.maerobotics.com
+########################################################################################
+
+FILENAME="mae_fts_sdk_sample"
+
+# Define the pattern to search for
+PATTERN="register-python-argcomplete.*$FILENAME"
+
+# Define the line to add, using the current directory
+LINE_TO_ADD="eval \"\$(register-python-argcomplete $FILENAME)\""
+
+# Array of possible config files
+CONFIG_FILES=("$HOME/.zshrc" "$HOME/.bashrc")
+
+# Loop through each config file and apply changes if the file exists
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [[ -f "$CONFIG_FILE" ]]; then
+        if grep -q "$PATTERN" "$CONFIG_FILE"; then
+            echo "Auto-complete already enabled in $CONFIG_FILE"
+        else
+            # If the pattern doesn't exist, append the line to the config file
+            echo "$LINE_TO_ADD" >>"$CONFIG_FILE"
+            echo "Added '$LINE_TO_ADD' to $CONFIG_FILE"
+        fi
+    else
+        echo "$CONFIG_FILE does not exist, skipping..."
+    fi
+done

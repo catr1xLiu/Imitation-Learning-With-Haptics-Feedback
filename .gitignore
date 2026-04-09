@@ -1,0 +1,27 @@
+# Data and outputs — never commit robot data or visualizations
+Collected_Data/
+visualization_outputs/
+*.h5
+*.npz
+
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environment
+.venv/
+
+# uv cache
+.uv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store

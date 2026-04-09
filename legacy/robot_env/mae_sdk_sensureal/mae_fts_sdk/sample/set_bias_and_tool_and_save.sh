@@ -1,0 +1,11 @@
+mae_fts_sdk_sample send_once FtsCommand.BIAS_SET
+sleep 1
+mae_fts_sdk_sample send_once FtsCommand.BIAS_READ
+sleep 1
+mae_fts_sdk_sample send_once FtsCommand.TOOL_TRANSFORMATION_RESET
+sleep 1
+mae_fts_sdk_sample send_once FtsCommand.TOOL_TZ_SET 0.00700 # From 7mm adapter
+sleep 1
+mae_fts_sdk_sample send_once FtsCommand.TOOL_TRANSFORMATION_READ_STRING
+sleep 1
+mae_fts_sdk_sample send_once FtsCommand.SETTINGS_SAVE

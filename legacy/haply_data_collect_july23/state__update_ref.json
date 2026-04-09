@@ -1,0 +1,111 @@
+{
+    "inverse3": [
+        {
+            "device_id": "04BA",
+            "state": {
+                "angular_position": {
+                    "a0": -69.31704,
+                    "a1": 137.62952,
+                    "a2": 19.832787
+                },
+                "angular_velocity": {
+                    "a0": 0,
+                    "a1": 0,
+                    "a2": 0
+                },
+                "body_orientation": {
+                    "x": -0.01940918,
+                    "y": 0.7026367,
+                    "z": 0.00048828125,
+                    "w": 0.7113037
+                },
+                "cursor_position": {
+                    "x": 0.07842738,
+                    "y": -0.14836666,
+                    "z": 0.14297646
+                },
+                "cursor_velocity": {
+                    "x": -0.011969013,
+                    "y": 0.0012009288,
+                    "z": -0.043197
+                },
+                "mode": "idle"
+            },
+            "status": {
+                "calibrated": false,
+                "in_use": false,
+                "power_supply": true,
+                "ready": true,
+                "started": true
+            }
+        }
+    ],
+    "verse_grip": [
+        {
+            "device_id": "61548",
+            "state": {
+                "button": false,
+                "hall": 0,
+                "orientation": {
+                    "x": -0.5019531,
+                    "y": 0.8632202,
+                    "z": -0.048095703,
+                    "w": -0.022338867
+                }
+            },
+            "status": {
+                "error": 0,
+                "ready": true
+            }
+        }
+    ],
+    "wireless_verse_grip": [
+        {
+            "device_id": "0",
+            "state": {
+                "battery_level": 0.816,
+                "battery_voltage": 3.77,
+                "buttons": {
+                    "a": false,
+                    "b": false,
+                    "c": false
+                },
+                "hall": 16,
+                "orientation": {
+                    "x": -0.019866943,
+                    "y": -0.017486572,
+                    "z": 0.05508423,
+                    "w": -0.9963989
+                }
+            },
+            "status": {
+                "ready": true
+            }
+        }
+    ],
+    "custom_verse_grip": [
+        {
+            "device_id": "0",
+            "state": {
+                "battery_level": 0.816,
+                "battery_voltage": 3.77,
+                "buttons": {
+                    "a": false,
+                    "b": false,
+                    "c": false
+                },
+                "hall": 16,
+                "orientation": {
+                    "x": -0.019866943,
+                    "y": -0.017486572,
+                    "z": 0.05508423,
+                    "w": -0.9963989
+                },
+                "extension_data": [0,0,0,0,0,0,0,0,0,0,0,0]
+            },
+            "status": {
+                "ready": true
+            }
+        }
+    ]
+}

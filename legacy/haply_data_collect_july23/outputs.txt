@@ -1,0 +1,19 @@
+Ready!
+Episode 9 started!
+Recording started.
+Sending target_pose: [-0.14746041  0.69268326  0.24349265 -2.42899993  1.80079509 -0.39789132]
+Recording stopped.
+Traceback (most recent call last):
+  File "/media/Data/demoaccount2/robot_diffusion/diffusion_policy_jul24/demo_real_robot_haply.py", line 300, in <module>
+    main()
+  File "/media/Data/miniconda3/envs/robodiff/lib/python3.9/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/media/Data/miniconda3/envs/robodiff/lib/python3.9/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/media/Data/miniconda3/envs/robodiff/lib/python3.9/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/media/Data/miniconda3/envs/robodiff/lib/python3.9/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/media/Data/demoaccount2/robot_diffusion/diffusion_policy_jul24/demo_real_robot_haply.py", line 282, in main
+    stages=[stage]
+NameError: name 'stage' is not defined

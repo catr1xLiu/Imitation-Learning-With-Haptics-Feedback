@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+dependencies = [
+    "argcomplete>=3.1.4,<4.0.0",
+    "icmplib>=3.0.4,<4.0.0",
+    "numpy>=1.26.4,<2.0.0",
+    "pyserial>=3.5,<4.0.0",
+]
+
+name = "mae_fts_sdk"
+version = "2025.00.00.alpha"
+authors = [{ name = "Eduardo Reis", email = "eduardo.reis@maerobotics.com" }]
+description = "Force-Torque Sensor (FTS) Python Software Development Kit (SDK)"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+
+[project.scripts]
+mae_fts_sdk_sample = "sample.mae_fts_sdk_sample:main"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mae_fts_sdk"]
