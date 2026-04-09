@@ -127,6 +127,21 @@ except `config.py`. If you need a new constant, add it there first.
 
 ---
 
+## Code Style
+
+**Black** is the formatter. Line length 88, Python 3.12 target. A pre-commit hook
+runs Black automatically on every `git commit` — no manual step required.
+
+To format manually:
+```bash
+uv run black .
+```
+
+Do not argue with Black's output. If a line looks odd after formatting, that is
+the canonical style.
+
+---
+
 ## Dependency Management
 
 Use `uv` exclusively.
@@ -135,16 +150,91 @@ Use `uv` exclusively.
 - Run tests: `uv run pytest`
 - Never edit the `[project.dependencies]` section of `pyproject.toml` manually.
 
-The MAE force-torque SDK is vendored in `legacy/robot_env/mae_sdk_sensureal/`.
-It is not a proper Python package — import it by ensuring `legacy/` is on `sys.path`
-or via the path handling in `hardware/force_torque.py`.
+The MAE force-torque SDK (`mae-fts-sdk`, `mae-sdk`) is vendored in
+`legacy/robot_env/mae_sdk_sensureal/` and installed as a local path dependency
+via `[tool.uv.sources]` in `pyproject.toml`. Import it normally:
+`from mae_fts_sdk import ...`
+
+---
+
+## Testing Standards
+
+### Test categories and markers
+
+Four categories of test exist, each with a pytest marker:
+
+| Marker | Requires | Location |
+|---|---|---|
+| *(none)* | Nothing — pure logic, no I/O | `tests/` |
+| `sim` | URSim running via Docker | `tests/` |
+| `hardware` | Physical device connected | `tests/hardware/` |
+| `interactive` | Human operating the device | `tests/hardware/` |
+
+Run selectively:
+```bash
+uv run pytest                          # unit tests only (no markers)
+uv run pytest -m sim                   # URSim tests
+uv run pytest -m hardware              # all hardware tests
+uv run pytest -m "hardware and not interactive"  # automated hardware only
+```
+
+### Unit tests — `tests/`
+
+Four files covering the logic layers that can be exercised without hardware:
+
+| File | What it tests |
+|---|---|
+| `test_haptic_decoding.py` | Haply WebSocket JSON → `HapticState`; delta computation |
+| `test_fts_transform.py` | FTS coordinate frame transform (Rodrigues formula) |
+| `test_ur_commands.py` | `URArm` driver in isolation against URSim (`@pytest.mark.sim`) |
+| `test_env_step.py` | Full `env.step()` against URSim with FTS/cameras stubbed (`@pytest.mark.sim`) |
+
+`test_ur_commands.py` uses URSim rather than mocks. The scope distinction between
+it and `test_env_step.py` is: failure in `test_ur_commands` points to the `URArm`
+driver; failure in `test_env_step` could be anywhere in `RobotEnv`.
+
+### Hardware tests — `tests/hardware/`
+
+Peripheral smoke tests run against real hardware with the robot arm **not enabled**.
+Each file targets one device in isolation:
+
+**`test_fts_hardware.py`**
+- UDP connection and initialisation (TRANSDUCER_SET + BIAS_SET)
+- Noise floor: 200 samples at rest, all channels within ±0.3 N / ±0.05 Nm
+- Data rate: 5-second stream asserted within ±10% of `FTS_HZ`
+- Coordinate transform: hand-apply a downward push, assert dominant TCP-frame Z force
+
+**`test_gripper_hardware.py`**
+- TCP connection to port 63352 and activation cycle
+- Open/close cycle × 3 with `is_open()` assertion each way
+- Partial position: command 128/255, assert readback within ±10 counts
+- Speed/force parameter range: min and max values accepted without fault codes
+
+**`test_haply_hardware.py`**
+- WebSocket connection and first valid JSON within 2 seconds
+- Data rate: >50 Hz over 5-second window
+- Button detection: operator presses A then B; rising edge asserted per button (`@pytest.mark.interactive`)
+- Workspace coverage: operator moves device for 10 s; position spans >50% of expected range (`@pytest.mark.interactive`)
+- Force feedback send: 0.5 N constant force command; no WebSocket error raised
+- Quaternion validity: `|q| ≈ 1.0` (within 0.01) over 200 samples
+
+### conftest.py conventions
+
+`tests/hardware/conftest.py` provides a shared fixture that:
+- Skips the entire hardware suite gracefully (not fails) if the target device is
+  unreachable, rather than producing cryptic timeout errors.
+- Asserts `SIM_MODE = False` and raises a clear error if someone accidentally
+  runs hardware tests against the sim configuration.
+- Prints the measured data rate and any dropped-packet warnings to stdout so they
+  are visible in the pytest summary even on a passing run.
 
 ---
 
 ## Constraints
 
-- **Python 3.14** — check that `pyrealsense2` has 3.14 wheels before running on
-  hardware. If not, pin to 3.12 in `.python-version` and `pyproject.toml`.
+- **Python 3.12** — pinned in `.python-version`. `ur-rtde` requires a C++ build
+  with Boost and has no Python 3.14 wheel. Do not bump the version without
+  verifying all compiled packages resolve cleanly.
 - **Camera serial numbers** in `config.py` are tied to specific physical cameras.
   Do not change without verifying with `rs-enumerate-devices`.
 - **`servoL` must be called from `ServoStreamer`** at `SERVO_HZ`, not from the

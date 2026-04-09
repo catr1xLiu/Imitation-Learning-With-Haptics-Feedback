@@ -3,9 +3,6 @@ name = "robot-manipulation"
 version = "0.1.0"
 description = "Teleoperation and imitation learning data collection for UR robot arm"
 requires-python = ">=3.10"
-# NOTE: pyrealsense2 may not have Python 3.14 wheels yet.
-# If `uv sync` fails on pyrealsense2, pin .python-version to 3.12 and update
-# requires-python below accordingly.
 dependencies = [
     "numpy>=1.26",
     "opencv-python>=4.9",
@@ -38,3 +35,13 @@ timeout = 30
 markers = [
     "sim: integration tests that require URSim running (docker)",
 ]
+
+[dependency-groups]
+dev = [
+    "black>=26.3.1",
+    "pre-commit>=4.5.1",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
